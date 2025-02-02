@@ -1,0 +1,9 @@
+#root {
+  width: 100vw;
+  height: 100vh * 100;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  background-color: rgb(0, 0, 0);
+  box-sizing: border-box;
+}
