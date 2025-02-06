@@ -9,6 +9,78 @@ import { Button, Grid2 } from "@mui/material";
 
 function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isListening, setIsListening] = useState(false);
+  const [, setTranscript] = useState("");
+
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.interimResults = false;
+    recognition.lang = "es-ES";
+
+    recognition.onresult = (event) => {
+      const result = event.results[0][0].transcript;
+      setTranscript(result);
+      console.log("Recognized speech:", result);
+      handleCommand(result);
+    };
+
+    recognition.onend = () => {
+      if (isListening) {
+        recognition.start();
+      }
+    };
+
+    if (isListening) {
+      recognition.start();
+    }
+
+    return () => {
+      recognition.stop();
+    };
+  }, [isListening]);
+
+  const handleCommand = (command: string) => {
+    console.log("Processing command:", command);
+    const button1 = document.getElementById("botón 1");
+    const button2 = document.getElementById("botón 2");
+    const button3 = document.getElementById("botón 3");
+    const button4 = document.getElementById("botón 4");
+    const button5 = document.getElementById("botón 5");
+    const button6 = document.getElementById("botón 6");
+    const button7 = document.getElementById("botón 7");
+    const button8 = document.getElementById("botón 8");
+    const button9 = document.getElementById("botón 9");
+    const button10 = document.getElementById("botón 10");
+
+    if (command.toLowerCase().trim() === "botón uno" && button1) {
+      button1.click();
+    } else if (command.toLowerCase().trim() === "botón 2" && button2) {
+      button2.click();
+    } else if (command.toLowerCase().trim() === "botón 3" && button3) {
+      button3.click();
+    } else if (command.toLowerCase().trim() === "botón 4" && button4) {
+      button4.click();
+    } else if (command.toLowerCase().trim() === "botón 5" && button5) {
+      button5.click();
+    } else if (command.toLowerCase().trim() === "botón 6" && button6) {
+      button6.click();
+    } else if (command.toLowerCase().trim() === "botón 7" && button7) {
+      button7.click();
+    } else if (command.toLowerCase().trim() === "botón 8" && button8) {
+      button8.click();
+    } else if (command.toLowerCase().trim() === "botón 9" && button9) {
+      button9.click();
+    } else if (command.toLowerCase().trim() === "botón 10" && button10) {
+      button10.click();
+    } else if (command.toLowerCase().trim() === "abajo") {
+      window.scrollBy(0, 500);
+    } else if (command.toLowerCase().trim() === "arriba") {
+      window.scrollBy(0, -500);
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -130,7 +202,14 @@ function App() {
     <div>
       <Grid2 container spacing={2} rowSpacing={1}>
         <Grid2 size={12}>
-          <Typography variant="h2">Lector de archivo de resultado de Assetto Corsa</Typography>
+          <Typography variant="h2">
+            Lector de archivo de resultado de Assetto Corsa
+          </Typography>
+        </Grid2>
+        <Grid2 size={12}>
+          <Button onClick={() => setIsListening(!isListening)}>
+            {isListening ? "Stop Listening" : "Start Listening"}
+          </Button>
         </Grid2>
         <Grid2 size={12}>
           <input type="file" accept=".json" onChange={handleFileChange} />
@@ -143,6 +222,7 @@ function App() {
         </Grid2>
         <Grid2 size={3}>
           <Button
+            id = "botón 1"
             onClick={showplayerlist}
             sx={{
               backgroundColor: "darkred",
@@ -154,7 +234,7 @@ function App() {
               width: "100%",
             }}
           >
-            Lista de jugadores
+            (1) Lista de jugadores
           </Button>
         </Grid2>
 
@@ -162,6 +242,7 @@ function App() {
           <>
             <Grid2 size={3}>
               <Button
+                id = "botón 2"
                 onClick={showalllapssesion1list}
                 sx={{
                   backgroundColor: "darkred",
@@ -173,12 +254,13 @@ function App() {
                   width: "100%",
                 }}
               >
-                Todas las vueltas de {resultado[0].name}
+                (2) Todas las vueltas de {resultado[0].name}
               </Button>
             </Grid2>
 
             <Grid2 size={3}>
               <Button
+                id = "botón 3"
                 onClick={showsesion1bestlapslist}
                 sx={{
                   backgroundColor: "darkred",
@@ -191,14 +273,15 @@ function App() {
                 }}
               >
                 {resultado[0].raceResult
-                  ? `Mejores vueltas de ${resultado[0].name}`
-                  : `Resultado de ${resultado[0].name}`}
+                  ? `(3) Mejores vueltas de ${resultado[0].name}`
+                  : `(3) Resultado de ${resultado[0].name}`}
               </Button>
             </Grid2>
 
             {resultado[0].raceResult ? (
               <Grid2 size={3}>
                 <Button
+                id = "botón 4"
                   onClick={showresultssesion1list}
                   sx={{
                     backgroundColor: "darkred",
@@ -210,7 +293,7 @@ function App() {
                     width: "100%",
                   }}
                 >
-                  Resultado de {resultado[0].name}
+                  (4) Resultado de {resultado[0].name}
                 </Button>
               </Grid2>
             ) : null}
@@ -221,6 +304,7 @@ function App() {
           <>
             <Grid2 size={3}>
               <Button
+              id = "botón 5"
                 onClick={showalllapssesion2list}
                 sx={{
                   backgroundColor: "darkred",
@@ -232,12 +316,13 @@ function App() {
                   width: "100%",
                 }}
               >
-                Todas las vueltas de {resultado[1].name}
+                (5) Todas las vueltas de {resultado[1].name}
               </Button>
             </Grid2>
 
             <Grid2 size={3}>
               <Button
+              id = "botón 6"
                 onClick={showsesion2bestlapslist}
                 sx={{
                   backgroundColor: "darkred",
@@ -250,14 +335,15 @@ function App() {
                 }}
               >
                 {resultado[1].raceResult
-                  ? `Mejores vueltas de ${resultado[1].name}`
-                  : `Resultado de ${resultado[1].name}`}
+                  ? `(6) Mejores vueltas de ${resultado[1].name}`
+                  : `(6) Resultado de ${resultado[1].name}`}
               </Button>
             </Grid2>
 
             {resultado[1].raceResult ? (
               <Grid2 size={3}>
                 <Button
+                id = "botón 7"
                   onClick={showresultssesion2list}
                   sx={{
                     backgroundColor: "darkred",
@@ -269,7 +355,7 @@ function App() {
                     width: "100%",
                   }}
                 >
-                  Resultado de {resultado[1].name}
+                  (7) Resultado de {resultado[1].name}
                 </Button>
               </Grid2>
             ) : null}
@@ -280,6 +366,7 @@ function App() {
           <>
             <Grid2 size={3}>
               <Button
+              id = "botón 8"
                 onClick={showalllapssesion3list}
                 sx={{
                   backgroundColor: "darkred",
@@ -291,12 +378,13 @@ function App() {
                   width: "100%",
                 }}
               >
-                Todas las vueltas de {resultado[2].name}
+                (8) Todas las vueltas de {resultado[2].name}
               </Button>
             </Grid2>
 
             <Grid2 size={3}>
               <Button
+              id = "botón 9"
                 onClick={showsesion3bestlapslist}
                 sx={{
                   backgroundColor: "darkred",
@@ -309,14 +397,15 @@ function App() {
                 }}
               >
                 {resultado[2].raceResult
-                  ? `Mejores vueltas de ${resultado[2].name}`
-                  : `Resultado de ${resultado[2].name}`}
+                  ? `(9) Mejores vueltas de ${resultado[2].name}`
+                  : `(9) Resultado de ${resultado[2].name}`}
               </Button>
             </Grid2>
 
             {resultado[2].raceResult ? (
               <Grid2 size={3}>
                 <Button
+                id = "botón 10"
                   onClick={showresultssesion3list}
                   sx={{
                     backgroundColor: "darkred",
@@ -328,7 +417,7 @@ function App() {
                     width: "100%",
                   }}
                 >
-                  Resultado de {resultado[2].name}
+                  (10) Resultado de {resultado[2].name}
                 </Button>
               </Grid2>
             ) : null}

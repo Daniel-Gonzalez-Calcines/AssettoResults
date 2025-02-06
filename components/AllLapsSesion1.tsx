@@ -32,7 +32,7 @@ function AllLapsSesion1({ sesion, file }: AllLapsSesion1Props) {
     }
 
     interface lap {
-        times: number[]
+        times: number[];
     }
 
     const [showall, setShowAll] = useState(false);
@@ -76,12 +76,17 @@ function AllLapsSesion1({ sesion, file }: AllLapsSesion1Props) {
                                     a.sectors[2] - b.sectors[2]
                             );
                             sortedSectors[2] = sortedSector3[0].sectors[2];
-                            const sortedsectorsback = newLaps.sort((a: { car: number; lap: number; }, b: { car: number; lap: number; }) => {
-                                if (a.car !== b.car) {
-                                    return a.car - b.car;
+                            const sortedsectorsback = newLaps.sort(
+                                (
+                                    a: { car: number; lap: number },
+                                    b: { car: number; lap: number }
+                                ) => {
+                                    if (a.car !== b.car) {
+                                        return a.car - b.car;
+                                    }
+                                    return a.lap - b.lap;
                                 }
-                                return a.lap - b.lap;
-                            });
+                            );
 
                             setBestSectorsList(sortedSectors);
                             setBestLapsList(sortedBestLaps[0].time);
@@ -124,7 +129,11 @@ function AllLapsSesion1({ sesion, file }: AllLapsSesion1Props) {
             currentbestlapupdate[car].times[2] = tiempos.sectors[2];
             currentbestlapupdate[car].times[3] = tiempos.time;
             return "purple";
-        } else if (currentbestlapupdate[car] === undefined || currentbestlapupdate[car].times[3] === undefined || tiempos.time <= currentbestlapupdate[car].times[3]) {
+        } else if (
+            currentbestlapupdate[car] === undefined ||
+            currentbestlapupdate[car].times[3] === undefined ||
+            tiempos.time <= currentbestlapupdate[car].times[3]
+        ) {
             if (currentbestlapupdate[car] === undefined) {
                 currentbestlapupdate[car] = { times: [] };
             }
@@ -132,25 +141,33 @@ function AllLapsSesion1({ sesion, file }: AllLapsSesion1Props) {
             currentbestlapupdate[car].times[1] = tiempos.sectors[1];
             currentbestlapupdate[car].times[2] = tiempos.sectors[2];
             currentbestlapupdate[car].times[3] = tiempos.time;
-            return "green"
+            return "green";
         } else {
-            return "orange"
+            return "orange";
         }
     }
 
     function selectcolorsector(sector: number, time: number, car: number) {
         if (time === bestsectorslist[sector]) {
             return "purple";
-        } else if (personalbestsectorsupdate[car] === undefined || personalbestsectorsupdate[car].times[sector] === undefined || time <= personalbestsectorsupdate[car].times[sector]) {
+        } else if (
+            personalbestsectorsupdate[car] === undefined ||
+            personalbestsectorsupdate[car].times[sector] === undefined ||
+            time <= personalbestsectorsupdate[car].times[sector]
+        ) {
             if (personalbestsectorsupdate[car] === undefined) {
                 personalbestsectorsupdate[car] = { times: [] };
             }
-            personalbestsectorsupdate[car].times[sector] = time
-            return "blue"
-        } else if (currentbestlapupdate[car] === undefined || currentbestlapupdate[car].times[sector] === undefined || time <= currentbestlapupdate[car].times[sector]) {
-            return "green"
+            personalbestsectorsupdate[car].times[sector] = time;
+            return "blue";
+        } else if (
+            currentbestlapupdate[car] === undefined ||
+            currentbestlapupdate[car].times[sector] === undefined ||
+            time <= currentbestlapupdate[car].times[sector]
+        ) {
+            return "green";
         } else {
-            return "orange"
+            return "orange";
         }
     }
 
@@ -198,71 +215,94 @@ function AllLapsSesion1({ sesion, file }: AllLapsSesion1Props) {
     return (
         <>
             {showall ? (
-                <Grid2>
-                    <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
-                        <Table sx={{ minWidth: 650 }} aria-label="Pilotos">
-                            <TableHead sx={{ backgroundColor: "darkred" }}>
-                                <TableRow>
-                                    <TableCell sx={{ color: "white" }}>Piloto</TableCell>
-                                    <TableCell sx={{ color: "white" }}>Coche</TableCell>
-                                    <TableCell sx={{ color: "white" }}>Sector 1</TableCell>
-                                    <TableCell sx={{ color: "white" }}>Sector 2</TableCell>
-                                    <TableCell sx={{ color: "white" }}>Sector 3</TableCell>
-                                    <TableCell sx={{ color: "white" }}>Tiempo</TableCell>
-                                    <TableCell sx={{ color: "white" }}>Vuelta</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {laps.length > 0 ? (
-                                    laps.map((row: bestLaps, index: number) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{finddriver(row)}</TableCell>
-                                            <TableCell>{findcar(row)}</TableCell>
-                                            <TableCell
-                                                sx={{
-                                                    color: selectcolorsector(0, row.sectors[0], row.car),
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                {formatMilliseconds(row.sectors[0])}
-                                            </TableCell>
-                                            <TableCell
-                                                sx={{
-                                                    color: selectcolorsector(1, row.sectors[1], row.car),
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                {formatMilliseconds(row.sectors[1])}
-                                            </TableCell>
-                                            <TableCell
-                                                sx={{
-                                                    color: selectcolorsector(2, row.sectors[2], row.car),
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                {formatMilliseconds(row.sectors[2])}
-                                            </TableCell>
-                                            <TableCell
-                                                sx={{
-                                                    color: selectcolor(row, row.car),
-                                                    fontWeight: "bold",
-                                                }}
-                                            >
-                                                {formatMilliseconds(row.time)}
-                                            </TableCell>
-                                            <TableCell>{row.lap + 1}</TableCell>
-                                        </TableRow>
-                                    ))
-                                ) : (
+                <Grid2 container spacing={2} rowSpacing={1}>
+                    <Grid2 size={12}>
+                        <Typography>
+                            <span style={{ color: 'purple', fontWeight: 'bold' }}>Mejor sector/vuelta general</span><br />
+                            <span style={{ color: 'blue', fontWeight: 'bold' }}>Mejor sector personal actual</span><br />
+                            <span style={{ color: 'green', fontWeight: 'bold' }}>Mejor sector que en mejor vuelta personal</span><br />
+                            <span style={{ color: 'green', fontWeight: 'bold' }}>Mejor vuelta personal</span><br />
+                            <span style={{ color: 'orange', fontWeight: 'bold' }}>No mejora mejor sector/vuelta actual</span>
+                        </Typography>
+                    </Grid2>
+                    <Grid2 size={12}>
+                        <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
+                            <Table sx={{ minWidth: 650 }} aria-label="Pilotos">
+                                <TableHead sx={{ backgroundColor: "darkred" }}>
                                     <TableRow>
-                                        <TableCell colSpan={5} align="center">
-                                            No hay datos disponibles.
-                                        </TableCell>
+                                        <TableCell sx={{ color: "white" }}>Piloto</TableCell>
+                                        <TableCell sx={{ color: "white" }}>Coche</TableCell>
+                                        <TableCell sx={{ color: "white" }}>Sector 1</TableCell>
+                                        <TableCell sx={{ color: "white" }}>Sector 2</TableCell>
+                                        <TableCell sx={{ color: "white" }}>Sector 3</TableCell>
+                                        <TableCell sx={{ color: "white" }}>Tiempo</TableCell>
+                                        <TableCell sx={{ color: "white" }}>Vuelta</TableCell>
                                     </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody>
+                                    {laps.length > 0 ? (
+                                        laps.map((row: bestLaps, index: number) => (
+                                            <TableRow key={index}>
+                                                <TableCell>{finddriver(row)}</TableCell>
+                                                <TableCell>{findcar(row)}</TableCell>
+                                                <TableCell
+                                                    sx={{
+                                                        color: selectcolorsector(
+                                                            0,
+                                                            row.sectors[0],
+                                                            row.car
+                                                        ),
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >
+                                                    {formatMilliseconds(row.sectors[0])}
+                                                </TableCell>
+                                                <TableCell
+                                                    sx={{
+                                                        color: selectcolorsector(
+                                                            1,
+                                                            row.sectors[1],
+                                                            row.car
+                                                        ),
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >
+                                                    {formatMilliseconds(row.sectors[1])}
+                                                </TableCell>
+                                                <TableCell
+                                                    sx={{
+                                                        color: selectcolorsector(
+                                                            2,
+                                                            row.sectors[2],
+                                                            row.car
+                                                        ),
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >
+                                                    {formatMilliseconds(row.sectors[2])}
+                                                </TableCell>
+                                                <TableCell
+                                                    sx={{
+                                                        color: selectcolor(row, row.car),
+                                                        fontWeight: "bold",
+                                                    }}
+                                                >
+                                                    {formatMilliseconds(row.time)}
+                                                </TableCell>
+                                                <TableCell>{row.lap + 1}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={5} align="center">
+                                                No hay datos disponibles.
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid2>
                 </Grid2>
             ) : (
                 <Typography variant="h1">Cargando datos</Typography>
