@@ -202,7 +202,7 @@ function App() {
     <div>
       <Grid2 container spacing={2} rowSpacing={1}>
         <Grid2 size={12}>
-          <Typography variant="h2">
+          <Typography variant="h2" color='white'>
             Lector de archivo de resultado de Assetto Corsa
           </Typography>
         </Grid2>
